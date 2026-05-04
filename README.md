@@ -1,17 +1,8 @@
 # Limen-9 心理疗愈终端
 
-Limen-9 是一个基于 React + Vite 构建的互动式 Web App。项目包含病例选择、诊断、干预、状态反馈、动态图形和可选的 AI 头像生成。
-
-## 技术栈
-
-- React
-- Vite
-- Tailwind CSS
-- Lucide React
+Limen-9 是一个基于 React + Vite 构建的互动式 Web App，包含病例选择、诊断、干预、状态反馈、动态可视化和静态人物头像。
 
 ## 本地运行
-
-请先安装 Node.js，然后在项目根目录执行：
 
 ```bash
 npm install
@@ -24,8 +15,6 @@ npm run dev
 http://localhost:5173
 ```
 
-普通 `npm run dev` 只启动 Vite 前端。如果要在本地同时测试 `/api/generate-image` 服务端函数，请使用 Vercel CLI 的 `vercel dev`。
-
 ## 生产构建
 
 ```bash
@@ -33,54 +22,36 @@ npm run build
 npm run preview
 ```
 
-## AI 头像 API Key
+## 静态人物图
 
-项目通过 Vercel Serverless Function 代理 Google AI 图片生成请求。真实 Key 读取自服务端环境变量：
+三个内置病例优先使用 `public/` 下的本地静态图片：
+
+- `case-2904-r.svg`
+- `case-8131-f.svg`
+- `case-4402-s.svg`
+
+前端正常启动时不需要调用图片生成服务。`src/staticImageFallback.js` 也会把旧版预加载逻辑中的 `/api/generate-image` 请求短路到这些静态图片，避免 Vercel 部署后浏览器继续请求图片生成 API。
+
+## 可选图片生成 API
+
+`api/generate-image.js` 仍可作为以后新增病例时的可选服务端接口。只有主动测试或新增无静态图的病例时才需要配置：
 
 ```text
 GOOGLE_AI_API_KEY
 ```
 
-本地测试服务端函数时，复制 `.env.example` 为 `.env`：
-
-```bash
-cp .env.example .env
-```
-
-然后在 `.env` 中填写：
-
-```text
-GOOGLE_AI_API_KEY=你的 Google AI API Key
-```
-
-不要把 `.env` 上传到 GitHub。
-
-如果没有配置 `GOOGLE_AI_API_KEY`，项目仍然可以运行，只是不会自动生成病例头像。
+不要使用 `VITE_GOOGLE_AI_API_KEY` 保存敏感 Key，因为 `VITE_*` 会被打包到浏览器端。
 
 ## Vercel 部署
 
-Vercel 配置已经写在 `vercel.json` 中：
+项目使用 Vite 配置：
 
 - Install Command: `npm install`
 - Build Command: `npm run build`
 - Output Directory: `dist`
 - Framework: `Vite`
 
-在 Vercel 部署时，请到项目设置中添加环境变量：
-
-```text
-GOOGLE_AI_API_KEY
-```
-
-路径：
-
-```text
-Vercel Project -> Settings -> Environment Variables
-```
-
-如果你使用的是 Vercel 连接 GitHub 自动部署，默认应该配置 Vercel 环境变量。GitHub Actions Secrets 只会在你自己写 GitHub Actions 工作流时使用。
-
-不要用 `VITE_GOOGLE_AI_API_KEY` 保存敏感 Key，因为 `VITE_*` 变量会被打包进浏览器端代码。
+这些配置已经写入 `vercel.json`。
 
 ## GitHub 上传注意事项
 
@@ -105,8 +76,4 @@ Vercel Project -> Settings -> Environment Variables
 - `.env`
 - `.env.*`
 
-如果 Vercel 报错 `Rollup failed to resolve import "/src/main.jsx"`，请检查 GitHub 仓库中是否真的存在 `src/main.jsx`。
-
-## 静态音频资源
-
-BGM 文件放在 `public/心流轻语.mp3`，前端通过 `/心流轻语.mp3` 读取。上传到 GitHub 或部署到 Vercel 时，请保留 `public/` 目录和这个 mp3 文件。
+BGM 文件位于 `public/心流轻语.mp3`，前端通过 `/心流轻语.mp3` 加载。

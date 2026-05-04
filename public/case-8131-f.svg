@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Patient 8131-F portrait">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset="0.55" stop-color="#fef3c7"/>
+      <stop offset="1" stop-color="#cffafe"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="47%" cy="36%" r="62%">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="44" fill="url(#bg)"/>
+  <circle cx="248" cy="184" r="198" fill="url(#glow)"/>
+  <path d="M92 206c72-38 142-37 211 2 45 25 81 25 119 1" fill="none" stroke="#f59e0b" stroke-width="5" stroke-linecap="round" opacity=".3"/>
+  <path d="M166 430c8-90 42-148 90-148s82 58 90 148" fill="#f8fafc" stroke="#94a3b8" stroke-width="6"/>
+  <circle cx="256" cy="196" r="74" fill="#f8fafc" stroke="#94a3b8" stroke-width="6"/>
+  <path d="M184 184c14-60 57-82 105-72 37 8 57 35 62 69-47-21-105-20-167 3z" fill="#475569"/>
+  <path d="M218 235c24 17 52 17 76 0" fill="none" stroke="#64748b" stroke-width="5" stroke-linecap="round" opacity=".5"/>
+  <path d="M213 195h28M274 195h28" stroke="#0f172a" stroke-width="7" stroke-linecap="round"/>
+  <circle cx="352" cy="335" r="50" fill="#fffbeb" stroke="#f59e0b" stroke-width="7"/>
+  <path d="M352 305v32l22 16" stroke="#92400e" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M138 330c52-32 93-34 124-8" fill="none" stroke="#67e8f9" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+</svg>
