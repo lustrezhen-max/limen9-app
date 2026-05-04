@@ -85,7 +85,6 @@ const CASES = [
       en: "Target lacks emotional support since childhood, binding total self-worth to a single intimate relationship. Exhibits separation anxiety. Highly susceptible to deep self-doubt when ignored." 
     },
     imagePrompt: "Anime style portrait of a young anxious 22 year old person looking at a datapad in a bright clean futuristic white room. They are surrounded by faint, glowing ethereal threads, soft natural lighting, healing atmosphere.",
-    image: "/case1.png"
     text: { 
       zh: "「他又沒有回消息。已經過去三個小時了。我是不是上一句話說得太重了？還是他根本就不在乎？如果他在乎，為什麼連個標點符號都不發？我要不要再發一條解釋一下？不，那樣顯得我很卑微。可是萬一他真的誤會了呢？我必須找到一個合理的解釋...」", 
       en: "\"He hasn't replied. It's been three hours. Was my last message too harsh? Or does he simply not care? If he did, why not even send a punctuation mark? Should I send another message to explain? No, that makes me look pathetic. But what if he really misunderstood? I must find a logical explanation...\"" 
