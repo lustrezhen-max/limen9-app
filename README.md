@@ -106,3 +106,7 @@ Vercel Project -> Settings -> Environment Variables
 - `.env.*`
 
 如果 Vercel 报错 `Rollup failed to resolve import "/src/main.jsx"`，请检查 GitHub 仓库中是否真的存在 `src/main.jsx`。
+
+## 静态音频资源
+
+BGM 文件放在 `public/心流轻语.mp3`，前端通过 `/心流轻语.mp3` 读取。上传到 GitHub 或部署到 Vercel 时，请保留 `public/` 目录和这个 mp3 文件。

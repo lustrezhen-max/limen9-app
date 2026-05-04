@@ -97,3 +97,7 @@ Repository -> Settings -> Secrets and variables -> Actions -> New repository sec
 不要把真实 API Key 写进代码，也不要提交 `.env` 文件。
 
 前端代码不要使用 `VITE_GOOGLE_AI_API_KEY` 保存敏感 Key，因为 `VITE_*` 变量会被 Vite 暴露给浏览器端代码。本项目已经改成 `/api/generate-image` 服务端代理，真实 Key 只放在服务端环境变量 `GOOGLE_AI_API_KEY` 中。
+
+## 5. BGM 静态资源
+
+BGM 文件为 `public/心流轻语.mp3`，前端通过 `/心流轻语.mp3` 加载。上传 GitHub 或触发 Vercel 部署时，不要漏掉 `public/` 目录。
