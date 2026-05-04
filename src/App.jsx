@@ -84,7 +84,8 @@ const CASES = [
       zh: "對象自幼缺乏情感寄託，將全部自我價值綁定於單一的親密關係。表現出分離焦慮，極易因被忽視而陷入深度的自我懷疑與內耗。", 
       en: "Target lacks emotional support since childhood, binding total self-worth to a single intimate relationship. Exhibits separation anxiety. Highly susceptible to deep self-doubt when ignored." 
     },
-    imagePrompt: "Anime style portrait of a young anxious 22 year old person looking at a datapad in a bright clean futuristic white room. They are surrounded by faint, glowing ethereal threads, soft natural lighting, healing atmosphere.",
+    // 直接指定本地圖片路徑，前提是圖片已放置在 public/ 根目錄下
+    image: "/case1.png",
     text: { 
       zh: "「他又沒有回消息。已經過去三個小時了。我是不是上一句話說得太重了？還是他根本就不在乎？如果他在乎，為什麼連個標點符號都不發？我要不要再發一條解釋一下？不，那樣顯得我很卑微。可是萬一他真的誤會了呢？我必須找到一個合理的解釋...」", 
       en: "\"He hasn't replied. It's been three hours. Was my last message too harsh? Or does he simply not care? If he did, why not even send a punctuation mark? Should I send another message to explain? No, that makes me look pathetic. But what if he really misunderstood? I must find a logical explanation...\"" 
@@ -107,7 +108,7 @@ const CASES = [
       zh: "老舊機械維護員。背負深重的愧疚感，認為兒子的死是自身疏忽所致。長期處於自我封閉與自責狀態，極度需要被傾聽與寬慰。", 
       en: "Old machinery maintenance worker. Bears deep guilt, believing his son's death was due to his own negligence. Chronically self-isolated and remorseful, desperately needs to be heard and comforted." 
     },
-    imagePrompt: "Anime style portrait of a 58 year old sorrowful man holding a broken pocket watch in a bright clean modern hospital corridor. Faint white ethereal threads surround him, soft sunlight coming from a window.",
+    image: "/case2.png",
     trueType: CASE_TYPES.FAMILY.id,
     initialStats: { density: 85, frequency: 35, dependency: 65, closure: 75 }
   },
@@ -126,7 +127,7 @@ const CASES = [
       zh: "新晉干員。受原生家庭嚴苛要求影響，對環境反饋極度敏感，具有嚴重的職場表現焦慮。迫切需要建立自信與心理安全邊界。", 
       en: "Junior operative. Influenced by strict family expectations, extremely sensitive to environmental feedback, suffering from severe workplace performance anxiety. Urgently needs to build self-confidence and psychological boundaries." 
     },
-    imagePrompt: "Anime style portrait of a tense 28 year old office worker in a bright, airy futuristic corporate lounge. Faint, sprawling pale blue glowing threads connect them to the blurred figures in the background.",
+    image: "/case3.png",
     trueType: CASE_TYPES.SOCIAL.id,
     initialStats: { density: 30, frequency: 65, dependency: 80, closure: 35 }
   }
@@ -234,6 +235,7 @@ const ThreadCocoonVisualizer = ({ stats, imageUrl, forceDemoSize, isLandscape, i
   const normalizedFreq = stats.frequency / 100;
   const normalizedDen = stats.density / 100;
   
+  // 在淺色背景下，線條稍微明顯一點
   const baseThickness = 0.8 + Math.pow(normalizedFreq, 2) * 3.0 + (normalizedDen * 1.5);
   const globalOpacity = 0.2 + (normalizedFreq * 0.6) + (normalizedDen * 0.2);
 
@@ -242,6 +244,7 @@ const ThreadCocoonVisualizer = ({ stats, imageUrl, forceDemoSize, isLandscape, i
   if (stats.closure > 75 || stats.density > 85) colorMode = 'rose';
   if (stats.density <= 15 && stats.closure === 0) colorMode = 'teal'; 
 
+  // 白底適配顏色：加深了線條顏色以保證對比度，提亮了核心光暈
   const colorMap = {
     teal: { stroke: 'stroke-teal-400', core: 'bg-teal-200', shell: 'fill-teal-50/80' },
     amber: { stroke: 'stroke-amber-400', core: 'bg-amber-200', shell: 'fill-amber-50/80' },
@@ -289,7 +292,7 @@ const ThreadCocoonVisualizer = ({ stats, imageUrl, forceDemoSize, isLandscape, i
   const transitionClass = isTransitioning ? 'scale-105 blur-[1px] brightness-110 opacity-80' : 'scale-100 blur-0 brightness-100 opacity-100';
 
   return (
-    <div className={`relative w-full ${heightClass} bg-white/60 border border-white/80 flex items-center justify-center overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] rounded-3xl flex-shrink-0 lg:flex-grow transition-all duration-[800ms] ease-in-out backdrop-blur-2xl ${transitionClass}`}>
+    <div className={`relative w-full ${heightClass} bg-white/60 border border-white/80 flex items-center justify-center overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.04)] rounded-[2rem] flex-shrink-0 lg:flex-grow transition-all duration-[800ms] ease-in-out backdrop-blur-2xl ${transitionClass}`}>
       
       {/* 柔和點陣背景 */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(148,163,184,0.15)_1px,transparent_1px)] bg-[size:20px_20px]"></div>
@@ -404,7 +407,7 @@ const CocoonEvolutionPage = ({ onNext, isLandscape, lang }) => {
 
       <div className={`mt-4 bg-white/70 border border-slate-200/50 backdrop-blur-xl rounded-[2.5rem] ${isLandscape ? 'p-10 flex-row' : 'p-6 flex-col'} flex items-center gap-8 shadow-[0_10px_40px_rgba(0,0,0,0.05)] relative overflow-hidden w-full max-w-5xl`}>
         
-        <div className={`flex items-center justify-center relative flex-shrink-0 rounded-2xl bg-slate-50/50 ${isLandscape ? 'w-[350px] h-[350px]' : 'w-full h-[250px]'}`}>
+        <div className={`flex items-center justify-center relative flex-shrink-0 rounded-[2rem] bg-slate-50/50 ${isLandscape ? 'w-[350px] h-[350px]' : 'w-full h-[250px]'}`}>
            <ThreadCocoonVisualizer stats={demoStats} imageUrl={null} forceDemoSize={true} isLandscape={isLandscape} isTransitioning={false} />
         </div>
 
@@ -432,7 +435,7 @@ const CocoonEvolutionPage = ({ onNext, isLandscape, lang }) => {
       <div className="text-center relative z-10 w-full mt-12 mb-10">
         <button 
           onClick={onNext}
-          className={`bg-cyan-600 text-white font-bold hover:bg-cyan-500 transition-all flex items-center justify-center mx-auto rounded-full w-full max-w-md shadow-[0_8px_20px_rgba(6,182,212,0.25)] hover:shadow-[0_12px_25px_rgba(6,182,212,0.4)] hover:-translate-y-1 ${isLandscape ? 'px-12 py-5 gap-4 text-base tracking-[0.2em]' : 'px-8 py-4 gap-3 text-sm tracking-[0.1em]'}`}
+          className={`bg-gradient-to-r from-teal-400 to-cyan-500 text-white font-bold hover:brightness-110 transition-all flex items-center justify-center mx-auto rounded-full w-full max-w-md shadow-[0_8px_20px_rgba(45,212,191,0.25)] hover:shadow-[0_12px_25px_rgba(34,211,238,0.4)] hover:-translate-y-1 ${isLandscape ? 'px-12 py-5 gap-4 text-base tracking-[0.2em]' : 'px-8 py-4 gap-3 text-sm tracking-[0.1em]'}`}
         >
           {lang === 'zh' ? '[ 演化確認 · 進入驗證協議 ]' : '[ EVOLUTION CONFIRMED · PROCEED ]'} <ArrowRight className={isLandscape ? 'w-5 h-5' : 'w-4 h-4'} />
         </button>
@@ -440,7 +443,6 @@ const CocoonEvolutionPage = ({ onNext, isLandscape, lang }) => {
     </div>
   );
 };
-
 
 const TacticalProgressBar = ({ label, value, description, isLandscape }) => {
   let currentStyle = 'bg-gradient-to-r from-teal-300 to-cyan-400 shadow-[0_0_10px_rgba(45,212,191,0.4)]';
@@ -530,50 +532,22 @@ export default function App() {
     }
   }, [isAudioOn]);
 
-  const fetchImageWithRetry = async (prompt, maxRetries = 5) => {
-    let delay = 1000;
-    for (let i = 0; i < maxRetries; i++) {
-      try {
-        const response = await fetch('/api/generate-image', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ prompt })
-        });
-        if (response.status === 204 || response.status === 404) return null;
-        if (!response.ok) throw new Error(`Image generation failed: ${response.status}`);
-        const text = await response.text();
-        if (!text) throw new Error("Empty response body");
-        const data = JSON.parse(text);
-        if (data.predictions && data.predictions[0]) {
-          return `data:image/png;base64,${data.predictions[0].bytesBase64Encoded}`;
-        }
-        throw new Error("No predictions found");
-      } catch (error) {
-        if (i === maxRetries - 1) return null;
-        await new Promise(resolve => setTimeout(resolve, delay));
-        delay *= 2;
-      }
-    }
-    return null;
-  };
-
+  // --- 移除複雜的 API 請求，改用本地圖片快速讀取 ---
   useEffect(() => {
-    const preloadAllImages = async () => {
-      const promises = CASES.map(async (c) => {
-        const prompt = c.imagePrompt + IMAGE_STYLE_SUFFIX;
-        const url = await fetchImageWithRetry(prompt);
-        return { id: c.id, url };
-      });
-
-      const results = await Promise.all(promises);
-      const imgMap = {};
-      results.forEach(r => { if (r.url) imgMap[r.id] = r.url; });
-      setPreloadedImages(imgMap);
-      setIsPreloading(false);
-    };
+    // 瞬間加載本地圖片，告別 API 延遲！
+    const imgMap = {};
+    CASES.forEach(c => {
+      // 若該案件配置了本地 image 屬性，則使用它；否則回退到 null
+      imgMap[c.id] = c.image || null;
+    });
+    setPreloadedImages(imgMap);
     
-    preloadAllImages();
+    // 稍微延遲一點點取消 Loading，讓過渡動畫更平滑
+    setTimeout(() => {
+      setIsPreloading(false);
+    }, 500);
   }, []);
+  // ------------------------------------------------
 
   const currentCaseImage = preloadedImages[currentCase?.id];
 
@@ -628,7 +602,7 @@ export default function App() {
                 hintObj.en = ">> THERAPY CALC: Kinship attachment is deeply fragile. [UNCONDITIONAL EMPATHY] highly recommended. Avoid harsh diversions.";
               }
               if (diagnosis === 'ROMANCE') {
-                hintObj.zh = ">> 療癒建議：對象正處於情感死循環。建議使用 [注意力轉移] 溫和打斷，粗暴阻斷易引發自殘傾嚮。";
+                hintObj.zh = ">> 療癒建議：對象正處於情感死循環。建議使用 [注意力轉移] 溫打斷，粗暴阻斷易引發自殘傾嚮。";
                 hintObj.en = ">> THERAPY CALC: Target in romance loop. [DIVERT ATTENTION] recommended. Rough interruptions may cause self-harm.";
               }
               if (diagnosis === 'SOCIAL') {
@@ -734,8 +708,6 @@ export default function App() {
     if(!isAudioOn) setIsAudioOn(true);
     advanceState(state);
   };
-
-  // --- Render Functions ---
 
   const renderLimen9 = () => (
     <div className="w-full flex flex-col items-center justify-center p-4 lg:p-10 animate-fade-in text-center z-10 py-12">
@@ -846,7 +818,6 @@ export default function App() {
     <div className="w-full flex flex-col items-center justify-center p-4 lg:p-10 animate-fade-in text-slate-800 py-12">
       
       <div className="w-full max-w-5xl bg-white/80 border border-slate-200 shadow-[0_20px_60px_rgba(0,0,0,0.05)] rounded-[3rem] flex flex-col overflow-hidden relative backdrop-blur-xl">
-        {/* Terminal Header */}
         <div className="bg-cyan-50/80 border-b border-cyan-100 p-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
             <Sparkle className="w-4 h-4 text-cyan-500" />
@@ -862,7 +833,6 @@ export default function App() {
         <div className={`p-6 lg:p-10 flex ${isLandscape ? 'flex-row' : 'flex-col'} gap-6 lg:gap-10 relative`}>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(148,163,184,0.1)_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none"></div>
 
-          {/* Left / Top Panel - System Status */}
           <div className={`flex flex-col items-center justify-center border border-slate-200 bg-slate-50/50 rounded-[2rem] p-8 relative overflow-hidden shadow-sm ${isLandscape ? 'w-1/3' : 'w-full'}`}>
              <div className="absolute inset-0 bg-teal-500/5 animate-pulse"></div>
              <HeartPulse className="w-16 h-16 md:w-20 md:h-20 text-rose-400 mb-6 drop-shadow-sm" />
@@ -876,7 +846,6 @@ export default function App() {
              </div>
           </div>
 
-          {/* Right / Bottom Panel - Rules */}
           <div className={`flex flex-col gap-4 lg:gap-5 relative z-10 ${isLandscape ? 'w-2/3' : 'w-full'}`}>
              <div className="flex items-center gap-3 mb-2">
                <Activity className="w-5 h-5 text-teal-500" />
@@ -915,7 +884,7 @@ export default function App() {
         <div className="bg-slate-50 border-t border-slate-200 p-4 lg:p-6 flex justify-center lg:justify-end items-center rounded-b-[2.5rem]">
            <button
               onClick={() => advanceState('CASE_INTRO')}
-              className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-teal-400 to-cyan-500 hover:brightness-105 text-white font-black uppercase tracking-[0.2em] shadow-[0_8px_15px_rgba(6,182,212,0.3)] hover:shadow-[0_12px_25px_rgba(34,211,238,0.5)] transition-all flex items-center justify-center gap-3 rounded-full w-full md:w-auto text-xs md:text-sm hover:-translate-y-0.5"
+              className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-teal-400 to-cyan-500 hover:brightness-105 text-white font-black uppercase tracking-[0.2em] shadow-[0_8px_15px_rgba(6,182,212,0.3)] hover:shadow-[0_12px_25px_rgba(34,211,238,0.4)] transition-all flex items-center justify-center gap-3 rounded-full w-full md:w-auto text-xs md:text-sm hover:-translate-y-0.5"
            >
               {lang === 'zh' ? '[ 確認守則 · 準備接診 ]' : '[ PROTOCOL CONFIRMED · RECEIVE PATIENT ]'} <ArrowRight className="w-4 h-4 md:w-5 md:h-5" />
            </button>
@@ -973,7 +942,7 @@ export default function App() {
           
           <button 
             onClick={() => advanceState('CASE')}
-            className={`bg-cyan-600 text-white font-bold shadow-[0_8px_20px_rgba(6,182,212,0.2)] hover:shadow-[0_12px_25px_rgba(6,182,212,0.3)] hover:bg-cyan-500 hover:-translate-y-1 transition-all flex items-center justify-center rounded-full w-full uppercase ${isLandscape ? 'md:w-auto px-10 py-4 gap-3 tracking-[0.2em] text-sm' : 'px-8 py-4 gap-3 tracking-[0.1em] text-xs'}`}
+            className={`bg-gradient-to-r from-teal-400 to-cyan-500 text-white font-bold shadow-[0_8px_20px_rgba(45,212,191,0.2)] hover:shadow-[0_12px_30px_rgba(34,211,238,0.3)] hover:brightness-105 hover:-translate-y-1 transition-all flex items-center justify-center rounded-full w-full uppercase ${isLandscape ? 'md:w-auto px-10 py-4 gap-3 tracking-[0.2em] text-sm' : 'px-8 py-4 gap-3 tracking-[0.1em] text-xs'}`}
           >
             {lang === 'zh' ? '開始溫柔對話' : 'INITIATE GENTLE DIALOGUE'} <Heart className={isLandscape ? 'w-5 h-5' : 'w-4 h-4'} />
           </button>
@@ -1016,10 +985,10 @@ export default function App() {
         <div className={`flex flex-col ${isLandscape ? 'col-span-7 gap-5 min-h-0 h-full' : 'col-span-1 gap-4 h-auto'}`}>
           
           <div className={`bg-white/80 p-4 lg:p-6 rounded-2xl border border-slate-200 relative group flex flex-col backdrop-blur-xl shadow-sm ${isLandscape ? 'min-h-0 flex-shrink flex-grow' : 'min-h-[180px]'}`}>
-            <div className="absolute top-0 left-0 w-1 lg:w-1.5 h-full bg-slate-200 rounded-l-2xl"></div>
+            <div className="absolute top-0 left-0 w-1 lg:w-1.5 h-full bg-teal-300 rounded-l-2xl"></div>
             <div className="flex items-center justify-between mb-3 lg:mb-4 border-b border-slate-100 pb-2 lg:pb-3 flex-shrink-0">
               <div className="flex items-center gap-2 lg:gap-3">
-                <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-cyan-600" />
+                <BookOpen className="w-4 h-4 lg:w-5 lg:h-5 text-teal-500" />
                 <h3 className="text-xs lg:text-sm font-bold text-slate-700 tracking-widest uppercase">{lang === 'zh' ? '傾聽：殘餘記憶日誌' : 'TRACE LOGS DECRYPTED'}</h3>
               </div>
             </div>
@@ -1029,14 +998,14 @@ export default function App() {
                 {currentCase.text[lang]}
               </p>
             </div>
-            <div className="mt-3 lg:mt-4 pt-3 lg:pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center gap-2 lg:gap-3 text-[10px] lg:text-xs text-slate-500 font-mono flex-shrink-0">
+            <div className="mt-3 lg:mt-4 pt-3 lg:pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center gap-2 lg:gap-3 text-[10px] lg:text-xs text-slate-400 font-mono flex-shrink-0">
                <span className="tracking-widest uppercase text-slate-400">{lang === 'zh' ? '[ 創傷觸發點 ]:' : '[ SOURCE TRIGGER ]: '}</span>
-               <span className="bg-slate-50 border border-slate-200 px-3 py-1.5 text-slate-700 font-bold tracking-widest rounded-md break-words">{currentCase.trigger[lang]}</span>
+               <span className="bg-slate-50 border border-slate-200 px-3 py-1.5 text-slate-700 font-bold tracking-widest rounded-md break-words shadow-sm">{currentCase.trigger[lang]}</span>
             </div>
           </div>
 
           {currentFeedback && (
-            <div className={`p-4 lg:p-5 border flex items-center gap-3 lg:gap-4 animate-slide-in shadow-md relative overflow-hidden flex-shrink-0 rounded-xl ${
+            <div className={`p-4 lg:p-5 border flex items-center gap-3 lg:gap-4 animate-slide-in shadow-md relative overflow-hidden flex-shrink-0 rounded-2xl ${
               currentFeedback.type === 'success' ? 'bg-teal-50 border-teal-200 text-teal-800' :
               currentFeedback.type === 'danger' ? 'bg-rose-50 border-rose-200 text-rose-800' :
               'bg-amber-50 border-amber-200 text-amber-800'
@@ -1066,14 +1035,14 @@ export default function App() {
                       <button
                         key={type.id}
                         onClick={() => handleDiagnosis(type.id)}
-                        className="flex items-center gap-3 lg:gap-5 p-3 border border-slate-200 bg-white hover:bg-slate-50 hover:border-cyan-400 hover:shadow-sm transition-all text-left group relative overflow-hidden rounded-xl"
+                        className="flex items-center gap-3 lg:gap-5 p-3 border border-slate-200 bg-white hover:bg-slate-50 hover:border-cyan-400 hover:shadow-md transition-all text-left group relative overflow-hidden rounded-xl"
                       >
-                        <div className="absolute left-0 top-0 bottom-0 w-1 bg-slate-200 group-hover:bg-cyan-400 transition-colors"></div>
-                        <div className="p-2 lg:p-2.5 border border-slate-100 bg-slate-50 group-hover:border-cyan-200 transition-colors shadow-inner rounded-lg flex-shrink-0">
+                        <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-slate-200 group-hover:bg-cyan-400 transition-colors"></div>
+                        <div className="p-2 lg:p-2.5 border border-slate-100 bg-slate-50 group-hover:border-cyan-200 transition-colors shadow-sm rounded-lg flex-shrink-0">
                           {type.icon}
                         </div>
                         <div className="min-w-0">
-                          <div className="font-bold text-slate-800 text-sm lg:text-base mb-0.5 tracking-widest truncate">{type.name[lang]}</div>
+                          <div className="font-bold text-slate-800 text-sm lg:text-base mb-0.5 tracking-widest truncate group-hover:text-cyan-700 transition-colors">{type.name[lang]}</div>
                           <div className="text-[10px] lg:text-xs text-slate-500 leading-relaxed tracking-wide hidden sm:block">{type.desc[lang]}</div>
                         </div>
                       </button>
@@ -1082,19 +1051,19 @@ export default function App() {
                  
                  <div className="mt-4 lg:mt-5 border-t border-slate-100 pt-4 lg:pt-5">
                    {!aiHint && !isGeneratingHint && (
-                     <button onClick={generateAiHint} className="w-full py-2.5 bg-slate-50 border border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-cyan-300 transition-all font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 group rounded-lg uppercase font-bold">
-                       <Cpu className="w-4 h-4 group-hover:text-cyan-500" />
+                     <button onClick={generateAiHint} className="w-full py-3 bg-slate-50 border border-slate-200 text-slate-500 hover:text-cyan-600 hover:border-cyan-300 hover:bg-white transition-all font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 group rounded-xl uppercase font-bold shadow-sm">
+                       <Stethoscope className="w-4 h-4 group-hover:text-cyan-500" />
                        {lang === 'zh' ? '[ 請求醫療 AI 解析 ]' : '[ REQUEST MED-AI ANALYSIS ]'}
                      </button>
                    )}
                    {isGeneratingHint && (
-                     <div className="w-full py-2.5 bg-cyan-50 border border-cyan-100 text-cyan-600 font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse rounded-lg font-bold">
+                     <div className="w-full py-3 bg-cyan-50 border border-cyan-100 text-cyan-600 font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse rounded-xl font-bold">
                        <Activity className="w-4 h-4 animate-spin" />
                        ANALYZING TRACE LOGS...
                      </div>
                    )}
                    {aiHint && (
-                     <div className={`w-full p-3 lg:p-4 bg-slate-50 border-l-4 font-mono text-[10px] md:text-xs leading-relaxed tracking-wider rounded-r-lg font-bold ${aiHint[lang].includes('錯誤') || aiHint[lang].includes('WARNING') ? 'border-rose-400 text-rose-600' : 'border-cyan-400 text-cyan-700'}`}>
+                     <div className={`w-full p-4 bg-white border-l-4 font-mono text-[10px] md:text-xs leading-relaxed tracking-wider rounded-r-xl shadow-sm font-bold ${aiHint[lang].includes('錯誤') || aiHint[lang].includes('WARNING') ? 'border-rose-400 text-rose-600' : 'border-cyan-400 text-cyan-700'}`}>
                        {aiHint[lang]}
                      </div>
                    )}
@@ -1105,7 +1074,7 @@ export default function App() {
              {phase === 'INTERVENTION' && (
               <div className="animate-fade-in relative z-10">
                  <h4 className="text-sm lg:text-base font-bold text-teal-600 mb-4 flex items-center gap-2 lg:gap-3 tracking-widest uppercase">
-                   <span className="bg-teal-100 text-teal-600 w-6 h-6 lg:w-7 lg:h-7 flex items-center justify-center text-xs rounded-md font-black">02</span> 
+                   <span className="bg-teal-100 text-teal-600 w-6 h-6 lg:w-7 lg:h-7 flex items-center justify-center text-xs rounded-lg font-black">02</span> 
                    {lang === 'zh' ? '選擇溫和的疏導手段' : 'EXECUTE HEALING PROCESS'}
                  </h4>
                  <div className={`grid gap-2 lg:gap-3 ${isLandscape ? 'grid-cols-2' : 'grid-cols-1'}`}>
@@ -1113,14 +1082,14 @@ export default function App() {
                       <button
                         key={inv.id}
                         onClick={() => executeIntervention(inv)}
-                        className={`text-left p-3 lg:p-4 border transition-all relative overflow-hidden group flex flex-col justify-center bg-white hover:shadow-sm rounded-xl h-full ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'border-rose-100 hover:border-rose-300' : 'border-teal-100 hover:border-teal-300'}`}
+                        className={`text-left p-3 lg:p-4 border transition-all relative overflow-hidden group flex flex-col justify-center bg-white hover:shadow-md rounded-2xl h-full ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'border-rose-100 hover:border-rose-300' : 'border-teal-100 hover:border-teal-300'}`}
                       >
-                        <div className={`absolute left-0 top-0 bottom-0 w-1 lg:w-1.5 opacity-50 transition-colors ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'bg-rose-200 group-hover:bg-rose-400' : 'bg-teal-200 group-hover:bg-teal-400'}`}></div>
+                        <div className={`absolute left-0 top-0 bottom-0 w-1.5 opacity-50 transition-colors ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'bg-rose-200 group-hover:bg-rose-400' : 'bg-teal-200 group-hover:bg-teal-400'}`}></div>
                         
-                        <div className="relative z-10 flex flex-col justify-center h-full w-full pl-1">
-                          <div className="font-bold text-slate-800 group-hover:text-slate-900 text-sm lg:text-base mb-1 tracking-widest flex items-center justify-between gap-2 transition-colors uppercase">
+                        <div className="relative z-10 flex flex-col justify-center h-full w-full pl-2">
+                          <div className="font-bold text-slate-700 group-hover:text-slate-900 text-sm lg:text-base mb-1 tracking-widest flex items-center justify-between gap-2 transition-colors uppercase">
                             <span className="truncate">{inv.name[lang]}</span>
-                            <span className={`text-[8px] lg:text-[9px] font-mono px-1.5 py-0.5 border rounded-sm whitespace-nowrap flex-shrink-0 ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'border-rose-200 text-rose-500 bg-rose-50' : 'border-teal-200 text-teal-600 bg-teal-50'}`}>{inv.tag[lang]}</span>
+                            <span className={`text-[8px] lg:text-[9px] font-mono px-1.5 py-0.5 border rounded-md whitespace-nowrap flex-shrink-0 ${inv.id === 'ACCEPT' || inv.id === 'RESTRICT' ? 'border-rose-200 text-rose-500 bg-rose-50' : 'border-teal-200 text-teal-600 bg-teal-50'}`}>{inv.tag[lang]}</span>
                           </div>
                           <div className="text-[10px] lg:text-xs text-slate-500 leading-relaxed hidden sm:block">{inv.desc[lang]}</div>
                         </div>
@@ -1130,19 +1099,19 @@ export default function App() {
                  
                  <div className="mt-4 lg:mt-5 border-t border-slate-100 pt-4 lg:pt-5">
                    {!aiHint && !isGeneratingHint && (
-                     <button onClick={generateAiHint} className="w-full py-2.5 bg-slate-50 border border-slate-200 text-slate-500 hover:text-teal-600 hover:border-teal-300 transition-all font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 group rounded-lg uppercase font-bold">
+                     <button onClick={generateAiHint} className="w-full py-3 bg-white border border-slate-200 text-slate-500 hover:text-teal-600 hover:border-teal-300 hover:shadow-sm transition-all font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 group rounded-xl uppercase font-bold shadow-sm">
                        <HeartPulse className="w-4 h-4 group-hover:text-teal-500" />
                        {lang === 'zh' ? '[ 請求療癒方案建議 ]' : '[ REQUEST THERAPY CALC ]'}
                      </button>
                    )}
                    {isGeneratingHint && (
-                     <div className="w-full py-2.5 bg-teal-50 border border-teal-100 text-teal-600 font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse rounded-lg font-bold">
+                     <div className="w-full py-3 bg-teal-50 border border-teal-100 text-teal-600 font-mono text-[10px] lg:text-xs tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse rounded-xl font-bold">
                        <Activity className="w-4 h-4 animate-spin" />
                        ANALYZING THERAPY OPTIONS...
                      </div>
                    )}
                    {aiHint && (
-                     <div className={`w-full p-3 lg:p-4 bg-slate-50 border-l-4 font-mono text-[10px] md:text-xs leading-relaxed tracking-wider rounded-r-lg font-bold ${aiHint[lang].includes('錯誤') || aiHint[lang].includes('WARNING') ? 'border-rose-400 text-rose-600' : 'border-teal-400 text-teal-700'}`}>
+                     <div className={`w-full p-4 bg-white border-l-4 font-mono text-[10px] md:text-xs leading-relaxed tracking-wider rounded-r-xl shadow-sm font-bold ${aiHint[lang].includes('錯誤') || aiHint[lang].includes('WARNING') ? 'border-rose-400 text-rose-600' : 'border-teal-400 text-teal-700'}`}>
                        {aiHint[lang]}
                      </div>
                    )}
@@ -1151,10 +1120,10 @@ export default function App() {
              )}
 
              {phase === 'RESULT' && (
-               <div className="animate-fade-in flex flex-col items-center justify-center py-6 z-30 relative">
+               <div className="animate-fade-in flex flex-col items-center justify-center py-6 lg:py-10 z-30 relative">
                  <button
                     onClick={nextCase}
-                    className="w-full max-w-sm py-3.5 lg:py-4 bg-gradient-to-r from-teal-400 to-cyan-500 hover:brightness-105 text-white font-bold shadow-[0_4px_15px_rgba(6,182,212,0.3)] hover:shadow-[0_6px_20px_rgba(6,182,212,0.5)] hover:-translate-y-1 transition-all flex justify-center items-center gap-2 lg:gap-3 text-sm lg:text-base animate-bounce-in tracking-[0.2em] rounded-full uppercase"
+                    className="w-full max-w-sm py-4 lg:py-5 bg-gradient-to-r from-teal-400 to-cyan-500 hover:brightness-105 text-white font-black shadow-[0_8px_20px_rgba(45,212,191,0.3)] hover:shadow-[0_12px_25px_rgba(34,211,238,0.4)] hover:-translate-y-1 transition-all flex justify-center items-center gap-2 lg:gap-3 text-sm lg:text-base animate-bounce-in tracking-[0.2em] rounded-full uppercase"
                  >
                     {lang === 'zh' ? '[ 更新檔案 · 接待下一位 ]' : '[ LOG SAVED · NEXT PATIENT ]'} <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5" />
                  </button>
@@ -1168,9 +1137,9 @@ export default function App() {
           <div className={`bg-white/80 p-4 lg:p-6 border border-slate-200 flex flex-col h-full shadow-sm rounded-2xl backdrop-blur-xl ${isLandscape ? 'min-h-[400px]' : 'h-auto'}`}>
             <div className="flex items-center justify-between mb-4 lg:mb-5 border-b border-slate-100 pb-2 lg:pb-3 flex-shrink-0">
               <h3 className="text-xs lg:text-sm font-bold text-slate-600 tracking-widest flex items-center gap-2 uppercase">
-                <Activity className="w-4 h-4 lg:w-5 lg:h-5 text-cyan-500" /> {lang === 'zh' ? '情緒波動監控雷達' : 'EMOTION RADAR'}
+                <Activity className="w-4 h-4 lg:w-5 lg:h-5 text-teal-500" /> {lang === 'zh' ? '情緒波動監控雷達' : 'EMOTION RADAR'}
               </h3>
-              {diagnosis && <span className="text-[8px] lg:text-[9px] font-bold px-2 py-1 bg-cyan-50 text-cyan-600 tracking-widest rounded-md uppercase border border-cyan-100">{CASE_TYPES[diagnosis].name[lang]}</span>}
+              {diagnosis && <span className="text-[8px] lg:text-[9px] font-bold px-2.5 py-1 bg-teal-50 text-teal-700 tracking-widest rounded-md uppercase border border-teal-100">{CASE_TYPES[diagnosis].name[lang]}</span>}
             </div>
             
             <div className={`flex flex-col relative mb-4 lg:mb-6 ${isLandscape ? 'flex-grow min-h-[150px]' : 'h-[300px]'}`}>
@@ -1212,7 +1181,7 @@ export default function App() {
 
     return (
       <div className="absolute inset-0 flex flex-col items-center justify-center p-4 lg:p-10 animate-fade-in text-slate-800 overflow-y-auto custom-scrollbar z-10">
-        <div className="bg-white/90 p-6 lg:p-14 border border-slate-200 w-full max-w-4xl relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.05)] rounded-[2rem] my-auto backdrop-blur-xl">
+        <div className="bg-white/90 p-6 lg:p-14 border border-slate-200 w-full max-w-4xl relative overflow-hidden shadow-[0_20px_60px_rgba(0,0,0,0.05)] rounded-[3rem] my-auto backdrop-blur-2xl">
           
           <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.05)_1px,transparent_1px)] bg-[size:30px_30px]"></div>
 
@@ -1261,7 +1230,6 @@ export default function App() {
           </div>
           <div className="flex items-center gap-2 lg:gap-6">
             
-            {/* 新增：BGM 控制開關 */}
             <button 
               onClick={() => setIsAudioOn(!isAudioOn)} 
               className="flex items-center gap-1.5 text-[9px] lg:text-[10px] text-slate-500 hover:text-cyan-600 transition-colors font-bold tracking-widest uppercase bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm relative z-50 cursor-pointer hover:shadow-md hover:-translate-y-0.5"
