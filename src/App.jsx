@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Heart, Sun, Cloud, BookOpen, Sparkles, ArrowRight, AlertCircle, Check, X, ShieldAlert, Activity, Database, Cpu, Globe2, User, Fingerprint, Terminal, Crosshair, Triangle, GitBranch, Beaker, Monitor, Smartphone, Languages, HeartPulse, Sparkle, Stethoscope, Volume2, VolumeX } from 'lucide-react';
 
+const IMAGE_STYLE_SUFFIX = ", masterpiece, high quality anime style, Limen-9 dystopia concept art, bright, clean, healing light, hospital or modern sci-fi room";
+
 // --- 遊戲底層數據 (治癒系雙語版) ---
 
 const CASE_TYPES = {
@@ -495,7 +497,7 @@ export default function App() {
 
   useEffect(() => {
     // 設置並加載 BGM (讀取您上傳的本地文件)
-    audioRef.current = new Audio('水滴与长笛.mp3');
+    audioRef.current = new Audio('/心流轻语.mp3');
     audioRef.current.loop = true;
     audioRef.current.volume = 0.4; // 舒適的背景音量
     
@@ -558,7 +560,7 @@ export default function App() {
   useEffect(() => {
     const preloadAllImages = async () => {
       const promises = CASES.map(async (c) => {
-        const prompt = c.imagePrompt + ", masterpiece, high quality anime style, Limen-9 dystopia concept art, bright, clean, healing light, hospital or modern sci-fi room";
+        const prompt = c.imagePrompt + IMAGE_STYLE_SUFFIX;
         const url = await fetchImageWithRetry(prompt);
         return { id: c.id, url };
       });
